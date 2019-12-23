@@ -1,0 +1,48 @@
+MariaDB [tugas_13_mysql]> DELIMITER //
+MariaDB [tugas_13_mysql]> CREATE PROCEDURE penilaian(nim_hasil CHAR(8))
+    -> BEGIN
+    ->  DECLARE nilai_hasil DECIMAL(4,2) DEFAULT 0;
+    ->  SELECT semester_1 INTO nilai_hasil
+    ->  FROM nilai_mahasiswa
+    ->  WHERE nim=nim_hasil;
+    ->          CASE
+    ->          WHEN (nilai_hasil = 0) THEN SELECT 'Mohon Maaf, NIM Tidak Ditemukan';
+    ->          WHEN (nilai_hasil <= 1.00) THEN SELECT 'Serius kuliah g sih?';
+    ->          WHEN (nilai_hasil <= 2.00) THEN SELECT 'Kebanyakan main';
+    ->          WHEN (nilai_hasil <= 3.00) THEN SELECT 'Berusaha lagi';
+    ->          WHEN (nilai_hasil <= 4.00) THEN SELECT 'Mantap, pertahankan!';
+    ->          ELSE SELECT 'Mohon Maaf, NIM Tidak Ditemukan';
+    ->          END CASE;
+    -> END //
+Query OK, 0 rows affected (0.158 sec)
+
+MariaDB [tugas_13_mysql]> DELIMITER ;
+MariaDB [tugas_13_mysql]> CALL penilaian('17080305');
++----------------------+
+| Mantap, pertahankan! |
++----------------------+
+| Mantap, pertahankan! |
++----------------------+
+1 row in set (0.001 sec)
+
+Query OK, 1 row affected (0.006 sec)
+
+MariaDB [tugas_13_mysql]> CALL penilaian('17140143');
++---------------+
+| Berusaha lagi |
++---------------+
+| Berusaha lagi |
++---------------+
+1 row in set (0.000 sec)
+
+Query OK, 1 row affected (0.007 sec)
+
+MariaDB [tugas_13_mysql]> CALL penilaian('17140200');
++---------------------------------+
+| Mohon Maaf, NIM Tidak Ditemukan |
++---------------------------------+
+| Mohon Maaf, NIM Tidak Ditemukan |
++---------------------------------+
+1 row in set (0.000 sec)
+
+Query OK, 0 rows affected, 1 warning (0.008 sec)
